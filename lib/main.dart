@@ -3,6 +3,7 @@ import 'myCard.dart';
 import 'snackBarTest.dart';
 import 'tostTest.dart';
 import 'containerTest.dart';
+import 'navigatorTest.dart';
 
 void main() {
   runApp(const MyApp());
@@ -16,7 +17,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'studyFlutter',
       theme: ThemeData(primarySwatch: Colors.blue),
-      home: const ContainerTest(),
+      home: const FirstPage(),
     );
   }
 }
