@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'myCard.dart';
-import 'package:nao/snackBarTest.dart';
+import 'snackBarTest.dart';
+import 'tostTest.dart';
 
 void main() {
   runApp(const MyApp());
@@ -14,7 +15,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'studyFlutter',
       theme: ThemeData(primarySwatch: Colors.blue),
-      home: const SnackBarTest(),
+      home: const TostTest(),
     );
   }
 }
