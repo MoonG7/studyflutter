@@ -6,6 +6,8 @@ import 'containerTest.dart';
 import 'navigatorTest.dart';
 
 void main() {
+  print('MyApp');
+  Future.delayed(Duration(seconds: 1),()=> print('실행되나?'));
   runApp(const MyApp());
 }
 
