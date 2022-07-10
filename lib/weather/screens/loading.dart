@@ -3,7 +3,7 @@ import 'package:nao/weather/data/mylocation.dart';
 import 'package:nao/weather/data/network.dart';
 import 'package:nao/weather/screens/weatherScreen.dart';
 
-const apiKey = '발급받은키 입력';
+const apiKey = 'c8595b46a23f2dfd3b9c36e083716bf3';
 
 class Loading extends StatefulWidget {
   const Loading({Key? key}) : super(key: key);
