@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "217040020876",
+    "project_id": "chat-app-cd70b",
+    "storage_bucket": "chat-app-cd70b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:217040020876:android:7856d7a4d47289ed36e2a9",
+        "android_client_info": {
+          "package_name": "com.smg.nao.nao"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "217040020876-1mneo7mqk7amv8rdk1chokkqf5gdqtbo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDIrXmubj2dLdNXJY3oCDy2aWDbvbg-jYs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "217040020876-1mneo7mqk7amv8rdk1chokkqf5gdqtbo.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
