@@ -1,10 +1,14 @@
+import 'dart:io';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:nao/chatting/add_image/add_image.dart';
 import 'package:nao/chatting/config/palette.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:nao/chatting/screens/chat_screen.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 class LoginSignupScreen extends StatefulWidget {
   const LoginSignupScreen({Key? key}) : super(key: key);
@@ -22,12 +26,29 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
   String userName = '';
   String userEmail = '';
   String userPassword = '';
+  File? userPickedImage;
+
+  void pickedImage(File image) {
+    userPickedImage = image;
+  }
 
   void _tryValidation() {
     final isValid = _formKey.currentState!.validate();
     if (isValid) {
       _formKey.currentState!.save();
     }
+  }
+
+  void showAlert(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return Dialog(
+          backgroundColor: Colors.white,
+          child: AddImage(pickedImage),
+        );
+      },
+    );
   }
 
   @override
@@ -157,18 +178,38 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                                 },
                                 child: Column(
                                   children: [
-                                    Text(
-                                      'Signup',
-                                      style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold,
-                                          color: isSignupScreen
-                                              ? Palette.activeColor
-                                              : Palette.textColor1),
+                                    Row(
+                                      children: [
+                                        Text(
+                                          'Signup',
+                                          style: TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold,
+                                              color: isSignupScreen
+                                                  ? Palette.activeColor
+                                                  : Palette.textColor1),
+                                        ),
+                                        SizedBox(
+                                          width: 15,
+                                        ),
+                                        if (isSignupScreen)
+                                          GestureDetector(
+                                            onTap: () {
+                                              showAlert(context);
+                                            },
+                                            child: Icon(
+                                              Icons.image,
+                                              color: isSignupScreen
+                                                  ? Colors.cyan
+                                                  : Colors.grey[300],
+                                            ),
+                                          )
+                                      ],
                                     ),
                                     if (isSignupScreen)
                                       Container(
-                                        margin: const EdgeInsets.only(top: 3),
+                                        margin: const EdgeInsets.fromLTRB(
+                                            0, 3, 35, 0),
                                         height: 2,
                                         width: 55,
                                         color: Colors.orange,
@@ -435,6 +476,18 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                             showSpinner = true;
                           });
                           if (isSignupScreen) {
+                            if (userPickedImage == null) {
+                              setState(() {
+                                showSpinner = false;
+                              });
+
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(const SnackBar(
+                                content: Text('Please pick your image'),
+                                backgroundColor: Colors.blue,
+                              ));
+                              return;
+                            }
                             _tryValidation();
 
                             try {
@@ -444,10 +497,21 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                                 password: userPassword,
                               );
 
-                              await FirebaseFirestore.instance.collection('user').doc(newUser.user!.uid)
-                              .set({
-                                'userName' : userName,
-                                'email' : userEmail
+                              final refImage = FirebaseStorage.instance
+                                  .ref()
+                                  .child('picked_image')
+                                  .child(newUser.user!.uid + '.png');
+
+                              await refImage.putFile(userPickedImage!);
+                              final url = await refImage.getDownloadURL();
+
+                              await FirebaseFirestore.instance
+                                  .collection('user')
+                                  .doc(newUser.user!.uid)
+                                  .set({
+                                'userName': userName,
+                                'email': userEmail,
+                                'picked_image' : url
                               });
 
                               if (newUser.user != null) {
@@ -463,6 +527,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                               }
                             } catch (e) {
                               print(e);
+                              if (!mounted) return;
                               ScaffoldMessenger.of(context)
                                   .showSnackBar(const SnackBar(
                                 content: Text(

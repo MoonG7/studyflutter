@@ -13,14 +13,25 @@ class _NewMessageState extends State<NewMessage> {
   final _controller = TextEditingController();
   var _userEnterMessage = '';
 
-  void _sendMessage(){
+  void _sendMessage() async {
     FocusScope.of(context).unfocus();
     final user = FirebaseAuth.instance.currentUser;
-    FirebaseFirestore.instance.collection('chat').add({
-      'text' : _userEnterMessage,
-      'time' : Timestamp.now(),
-      'userID': user!.uid
-    });
+
+    final userData = await FirebaseFirestore.instance
+        .collection('user')
+        .doc(user!.uid)
+        .get();
+
+    if (user != null) {
+        FirebaseFirestore.instance.collection('chat').add({
+          'text': _userEnterMessage,
+          'time': Timestamp.now(),
+          'userID': user.uid,
+          'userName': userData.data()!['userName'],
+          'userImage': userData.data()!['picked_image'],
+        });
+
+    }
     _controller.clear();
   }
 
@@ -35,9 +46,7 @@ class _NewMessageState extends State<NewMessage> {
             child: TextField(
               maxLines: null,
               controller: _controller,
-              decoration: InputDecoration(
-                  labelText: 'Send a message...'
-              ),
+              decoration: InputDecoration(labelText: 'Send a message...'),
               onChanged: (value) {
                 setState(() {
                   _userEnterMessage = value;
@@ -46,11 +55,10 @@ class _NewMessageState extends State<NewMessage> {
             ),
           ),
           IconButton(
-            onPressed: _userEnterMessage
-                .trim()
-                .isEmpty ? null : _sendMessage,
+            onPressed: _userEnterMessage.trim().isEmpty ? null : _sendMessage,
             icon: Icon(Icons.send),
-            color: Colors.blue,),
+            color: Colors.blue,
+          ),
         ],
       ),
     );
