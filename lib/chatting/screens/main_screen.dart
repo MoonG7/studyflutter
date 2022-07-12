@@ -4,6 +4,7 @@ import 'package:nao/chatting/config/palette.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:nao/chatting/screens/chat_screen.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class LoginSignupScreen extends StatefulWidget {
   const LoginSignupScreen({Key? key}) : super(key: key);
@@ -443,13 +444,19 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                                 password: userPassword,
                               );
 
+                              await FirebaseFirestore.instance.collection('user').doc(newUser.user!.uid)
+                              .set({
+                                'userName' : userName,
+                                'email' : userEmail
+                              });
+
                               if (newUser.user != null) {
-                                Navigator.push(
+                                /*Navigator.push(
                                   context,
                                   MaterialPageRoute(builder: (context) {
                                     return const ChatScreen();
                                   }),
-                                );
+                                );*/
                                 setState(() {
                                   showSpinner = false;
                                 });
