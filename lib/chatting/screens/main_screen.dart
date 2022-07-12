@@ -482,12 +482,12 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
 
                               if (newUser.user != null) {
                                 if (!mounted) return;
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(builder: (context) {
-                                    return const ChatScreen();
-                                  }),
-                                );
+                                // Navigator.push(
+                                //   context,
+                                //   MaterialPageRoute(builder: (context) {
+                                //     return const ChatScreen();
+                                //   }),
+                                // );
                               }
                             } catch (e) {
                               print(e);

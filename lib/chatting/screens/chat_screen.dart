@@ -2,6 +2,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:nao/chatting/chat/message.dart';
+import 'package:nao/chatting/chat/new_message.dart';
 
 class ChatScreen extends StatefulWidget {
   const ChatScreen({Key? key}) : super(key: key);
@@ -51,7 +53,20 @@ class _ChatScreenState extends State<ChatScreen> {
             ),
           ],
         ),
-        body: StreamBuilder(
+        body: Container(
+          child: Column(
+            children: [
+              Expanded(
+                child: Messages(),
+              ),
+              NewMessage(),
+            ],
+          ),
+        ));
+  }
+}
+
+/*StreamBuilder(
           stream: FirebaseFirestore.instance
               .collection('chats/OLfCyCc9quXO7s4fg7CN/message')
               .snapshots(),
@@ -74,6 +89,4 @@ class _ChatScreenState extends State<ChatScreen> {
               },
             );
           },
-        ));
-  }
-}
+        )*/
