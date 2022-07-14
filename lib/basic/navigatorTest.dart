@@ -35,9 +35,32 @@ class SecondPage extends StatelessWidget {
       body: Center(
         child: ElevatedButton(
           onPressed: () {
+            Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) {
+              return ThirdPage();
+            }));
+          },
+          child: Text('Go to ThirdPage Page'),
+        ),
+      ),
+    );
+  }
+}
+
+class ThirdPage extends StatelessWidget {
+  const ThirdPage({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('SecondPage'),
+      ),
+      body: Center(
+        child: ElevatedButton(
+          onPressed: () {
             Navigator.pop(context);
           },
-          child: Text('Go to First Page'),
+          child: Text('Go to SecondPage Page'),
         ),
       ),
     );
